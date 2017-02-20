@@ -11,15 +11,16 @@ import UIKit
 class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate{
     
     var businesses: [Business]!
-    var searchbar: UISearchBar?
+    var searchBar: UISearchBar?
     
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        searchbar = UISearchBar()
-        searchbar?.sizeToFit()
-        navigationItem.titleView = searchbar
+        searchBar = UISearchBar()
+        searchBar?.delegate = self
+        searchBar?.sizeToFit()
+        navigationItem.titleView = searchBar
         
         
         
@@ -42,11 +43,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             
             }
         )
-        
-        
-        
     }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if businesses != nil {
             return businesses.count
@@ -62,20 +59,19 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         
         return cell
     }
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        searchbar?.endEditing(true)
-        Business.searchWithTerm(term: searchText, completion: { (businesses: [Business]?, error: Error?) -> Void in
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
+        let searchtext = searchBar.text!
+        Business.searchWithTerm(term: searchtext, completion: { (businesses: [Business]?, error: Error?) -> Void in
             
             self.businesses = businesses
-            
+            self.tableView.reloadData()
             if let businesses = businesses {
                 for business in businesses {
                     print(business.name!)
                     print(business.address!)
                 }
             }
-            self.tableView.reloadData()
-            
             
         }
         )

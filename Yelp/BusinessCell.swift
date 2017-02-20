@@ -22,7 +22,9 @@ class BusinessCell: UITableViewCell {
         didSet {
             restName.text = business.name
             restName.sizeToFit()
+            if business.imageURL != nil {
             restPhoto.setImageWith(business.imageURL!)
+            }
             restTags.text = business.categories
             restAddress.text = business.address
             restReview.text = "\(business.reviewCount!) Reviews"
